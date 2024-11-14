@@ -1,7 +1,9 @@
 export default function Home() {
   return (
-    <div>
-      <h1 className="text-3xl">Nimbus</h1>
+    <div className="flex-center h-screen bg-amber-100">
+      <h1 className="h1">
+        Nimbus
+      </h1>
     </div>
   );
 }

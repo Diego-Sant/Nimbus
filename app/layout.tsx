@@ -14,14 +14,11 @@ export const metadata: Metadata = {
   description: "Seu armazenamento seguro nas nuvens. Organize, compartilhe e acesse seus arquivos de qualquer lugar, com facilidade e proteção. Simples, rápido e ao seu alcance.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  // eslint-disable-next-line no-undef
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }
+  : Readonly<{children: React.ReactNode;}>) {
+
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body // eslint-disable-next-line tailwindcss/no-custom-classname
         className={`${poppins.variable} font-poppins antialiased`}
       >
@@ -29,4 +26,5 @@ export default function RootLayout({
       </body>
     </html>
   );
+
 }
