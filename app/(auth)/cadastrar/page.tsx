@@ -1,10 +1,9 @@
+import AuthForm from '@/components/AuthForm'
 import React from 'react'
 
 const Cadastrar = () => {
   return (
-    <div>
-      Cadastrar
-    </div>
+    <AuthForm type="cadastrar" />
   )
 }
 
