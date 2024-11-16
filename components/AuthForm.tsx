@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem,
 FormLabel, FormMessage } from "@/components/ui/form";
 import Link from "next/link";
+import { createAccount } from "@/lib/actions/user.actions";
 
 type FormType = 'entrar' | 'cadastrar';
 
@@ -28,6 +29,8 @@ const authFormSchema = (formType: FormType) => {
 const AuthForm = ({ type }: {type: FormType}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [accountId, setAccountId] = useState(null);
 
     const formSchema = authFormSchema(type);
 
@@ -40,7 +43,22 @@ const AuthForm = ({ type }: {type: FormType}) => {
     })
     
     const onSubmit = async(values: z.infer<typeof formSchema>) => {
-        console.log(values)
+        setIsLoading(true);
+        setErrorMessage('');
+
+        try {
+            const user = await createAccount({ 
+                username: values.username || "",
+                email: values.email
+            });
+            
+            setAccountId(user.accountId);
+
+        } catch {
+            setErrorMessage("Falha ao criar o usuário, tente novamente mais tarde!")
+        } finally {
+            setIsLoading(false);
+        }
     }
 
   return (
