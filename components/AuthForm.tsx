@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem,
 FormLabel, FormMessage } from "@/components/ui/form";
 import Link from "next/link";
 import { createAccount } from "@/lib/actions/user.actions";
+import OTPModal from "./OTPModal";
 
 type FormType = 'entrar' | 'cadastrar';
 
@@ -29,7 +30,6 @@ const authFormSchema = (formType: FormType) => {
 const AuthForm = ({ type }: {type: FormType}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [accountId, setAccountId] = useState(null);
 
     const formSchema = authFormSchema(type);
@@ -82,6 +82,7 @@ const AuthForm = ({ type }: {type: FormType}) => {
                                 <FormControl>
                                     <Input placeholder="Coloque o nome do usuário" 
                                         className="shad-input" {...field} 
+                                        autoFocus={type === "entrar"}
                                     />
                                 </FormControl>
                             </div>
@@ -104,7 +105,8 @@ const AuthForm = ({ type }: {type: FormType}) => {
                             </FormLabel>
                             <FormControl>
                                 <Input placeholder="Coloque o email" 
-                                    className="shad-input" {...field} 
+                                    className="shad-input" {...field}
+                                    autoFocus={type === "cadastrar"} 
                                 />
                             </FormControl>
                         </div>
@@ -143,6 +145,10 @@ const AuthForm = ({ type }: {type: FormType}) => {
 
             </form>
         </Form>
+
+        {true && (
+            <OTPModal email={form.getValues('email')} accountId={accountId} />
+        )}
     </>
   )
 }
