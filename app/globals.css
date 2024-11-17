@@ -154,7 +154,7 @@
     @apply text-red body-2 ml-4 !important;
   }
   .shad-alert-dialog {
-    @apply space-y-4 max-w-[95%] sm:w-fit rounded-xl md:rounded-[30px] px-4 md:px-8 py-10 bg-white outline-none !important;
+    @apply space-y-4 max-w-[95%] sm:max-w-[65%] lg:max-w-[60%] xl:max-w-[40%] rounded-xl md:rounded-[30px] px-4 md:px-8 py-10 bg-white outline-none !important;
   }
   .shad-submit-btn {
     @apply bg-primaryColor button hover:bg-primaryColor-100 transition-all rounded-full !important;

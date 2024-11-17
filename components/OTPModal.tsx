@@ -1,24 +1,19 @@
+"use client";
+
 import React, { useState } from 'react'
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp"
 import Image from 'next/image';
-import { Button } from './ui/button';
+import { useRouter } from 'next/navigation';
+
+import { sendEmailOTP, verifySecret } from '@/lib/actions/user.actions';
+
+import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription,
+AlertDialogFooter, AlertDialogHeader, AlertDialogTitle} from "@/components/ui/alert-dialog"
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"
 
 const OTPModal = ({ accountId, email }: { accountId: string; email: string}) => {
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState('');
@@ -28,7 +23,11 @@ const OTPModal = ({ accountId, email }: { accountId: string; email: string}) => 
     setIsLoading(true);
 
     try {
+      const sessionId = await verifySecret({ accountId, password });
 
+      if(sessionId) {
+        router.push("/");
+      }
       
     } catch (error) {
       console.log("Falha ao verificar senha única.", error);
@@ -38,7 +37,7 @@ const OTPModal = ({ accountId, email }: { accountId: string; email: string}) => 
   }
 
   const handleResendOTP = async() => {
-
+    await sendEmailOTP({ email });
   };
 
   return (
