@@ -2,25 +2,27 @@
 
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+
 import Image from "next/image";
+import Link from "next/link";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { createAccount, signInUser } from "@/lib/actions/user.actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem,
 FormLabel, FormMessage } from "@/components/ui/form";
-import Link from "next/link";
-import { createAccount } from "@/lib/actions/user.actions";
-import OTPModal from "./OTPModal";
+
+import OTPModal from "@/components/OTPModal";
 
 type FormType = 'entrar' | 'cadastrar';
 
 const authFormSchema = (formType: FormType) => {
     return z.object({
         email: z.string().email("Por favor, insira um email válido."),
-        username: formType === "entrar" ? 
+        username: formType === "cadastrar" ? 
             z.string().min(2, "O nome de usuário deve ter no mínimo 2 caracteres.")
             .max(50, "O nome de usuário deve ter no máximo 50 caracteres.") 
             : z.string().optional(),
@@ -47,10 +49,10 @@ const AuthForm = ({ type }: {type: FormType}) => {
         setErrorMessage('');
 
         try {
-            const user = await createAccount({ 
+            const user = type === "cadastrar" ? await createAccount({ 
                 username: values.username || "",
                 email: values.email
-            });
+            }) : await signInUser({email: values.email})
             
             setAccountId(user.accountId);
 
@@ -69,7 +71,7 @@ const AuthForm = ({ type }: {type: FormType}) => {
                     {type === "cadastrar" ? "Cadastrar" : "Entrar"}
                 </h1>
 
-                {type === "entrar" && (
+                {type === "cadastrar" && (
                     <FormField control={form.control} name="username"
                     render={({ field }) => (
     
@@ -82,7 +84,7 @@ const AuthForm = ({ type }: {type: FormType}) => {
                                 <FormControl>
                                     <Input placeholder="Coloque o nome do usuário" 
                                         className="shad-input" {...field} 
-                                        autoFocus={type === "entrar"}
+                                        autoFocus={type === "cadastrar"}
                                     />
                                 </FormControl>
                             </div>
@@ -106,7 +108,7 @@ const AuthForm = ({ type }: {type: FormType}) => {
                             <FormControl>
                                 <Input placeholder="Coloque o email" 
                                     className="shad-input" {...field}
-                                    autoFocus={type === "cadastrar"} 
+                                    autoFocus={type === "entrar"} 
                                 />
                             </FormControl>
                         </div>

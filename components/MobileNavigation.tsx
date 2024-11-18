@@ -1,16 +1,19 @@
 "use client";
 
 import React, { useState } from 'react'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation';
+import Image from 'next/image'
+import Link from 'next/link';
+
+import { getCurrentUser, signOutUser, updateAvatar } from '@/lib/actions/user.actions';
+import { cn } from '@/lib/utils';
+import { navItems } from '@/constants';
 
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Separator } from './ui/separator';
-import { navItems } from '@/constants';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import FileUploader from './FileUploader';
-import { Button } from './ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import FileUploader from '@/components/FileUploader';
+import AvatarSelectionDialog from '@/components/AvatarSelectionDialog';
 
 interface Props {
   ownerId: string;
@@ -21,8 +24,23 @@ interface Props {
 }
 
 const MobileNavigation = ({ ownerId, accountId, username, avatar, email}: Props) => {
-  const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  const [open, setOpen] = useState(false);
+  const [currentAvatar, setCurrentAvatar] = useState(avatar);
+
+  const handleAvatarChange = async (newAvatar: string) => {
+    setCurrentAvatar(newAvatar);
+
+    try {
+        const user = await getCurrentUser();
+        if (user) {
+            await updateAvatar(user.$id, newAvatar);
+        }
+    } catch (error) {
+        console.error("Erro ao atualizar o avatar.", error);
+    }
+  };
 
   return (
     <header className='mobile-header'>
@@ -39,8 +57,10 @@ const MobileNavigation = ({ ownerId, accountId, username, avatar, email}: Props)
 
           <SheetTitle>
             <div className='header-user'>
-              <Image src={avatar} alt='Avatar' width={44} height={44} 
-                className='header-user-avatar'/>
+              <AvatarSelectionDialog
+                  currentAvatar={currentAvatar}
+                  onAvatarChange={handleAvatarChange}
+              />
               <div>
                 <p className='subtitle-2 max-w-[240px] truncate capitalize'>{username}</p>
                 <p className='caption max-w-[240px] truncate'>{email}</p>
@@ -73,7 +93,7 @@ const MobileNavigation = ({ ownerId, accountId, username, avatar, email}: Props)
             <FileUploader />
 
             <Button type='submit' className='mobile-sign-out-button' 
-              onClick={() => {}}>
+              onClick={async() => await signOutUser()}>
               <Image src="/icons/logout.svg" alt='Sair da conta'
                 width={24} height={24} />
               <p>Sair</p>

@@ -1,9 +1,10 @@
 import React from 'react'
 import Image from 'next/image'
 
-import { Button } from './ui/button'
-import Search from './Search'
-import FileUploader from './FileUploader'
+import { signOutUser } from '@/lib/actions/user.actions'
+import { Button } from '@/components/ui/button'
+import Search from '@/components/Search'
+import FileUploader from '@/components/FileUploader'
 
 const Header = () => {
   return (
@@ -13,7 +14,12 @@ const Header = () => {
       <div className='header-wrapper'>
         <FileUploader />
 
-        <form>
+        <form action={async() => {
+          'use server';
+
+          await signOutUser();
+        }}>
+
           <Button type='submit' className='sign-out-button'>
             <Image src="/icons/logout.svg" alt='Sair da conta'
               width={24} height={24} className='w-6' />

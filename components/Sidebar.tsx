@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react'
+import React, { useState } from 'react'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -8,6 +8,8 @@ import { usePathname } from 'next/navigation'
 
 import { navItems } from '@/constants'
 import { cn } from '@/lib/utils';
+import AvatarSelectionDialog from './AvatarSelectionDialog';
+import { getCurrentUser, updateAvatar } from '@/lib/actions/user.actions';
 
 interface Props {
   username: string;
@@ -17,6 +19,20 @@ interface Props {
 
 const Sidebar = ({ username, avatar, email }: Props) => {
   const pathname = usePathname();
+  const [currentAvatar, setCurrentAvatar] = useState(avatar);
+
+  const handleAvatarChange = async (newAvatar: string) => {
+    setCurrentAvatar(newAvatar);
+
+    try {
+        const user = await getCurrentUser();
+        if (user) {
+            await updateAvatar(user.$id, newAvatar);
+        }
+    } catch (error) {
+        console.error("Erro ao atualizar o avatar no backend:", error);
+    }
+  };
 
   return (
     <aside className='sidebar'>
@@ -56,8 +72,10 @@ const Sidebar = ({ username, avatar, email }: Props) => {
 
       <div className='sidebar-user-info'>
 
-          <Image src={avatar} alt='Avatar' width={44} height={44}
-            className='sidebar-user-avatar' />
+          <AvatarSelectionDialog
+              currentAvatar={currentAvatar}
+              onAvatarChange={handleAvatarChange}
+          />
 
           <div className='hidden lg:block'>
             <p className='subtitle-2 max-w-[150px] truncate capitalize xl:max-w-[200px]'>

@@ -26,4 +26,4 @@ export const navItems = [
     },
 ]
 
-export const avatarPlaceholderUrl = "https://img.freepik.com/premium-vector/man-empty-avatar-casual-business-style-vector-photo-placeholder-social-networks-resumes_885953-434.jpg"
+export const avatarPlaceholderUrl = "https://cdn-icons-png.flaticon.com/128/149/149071.png"

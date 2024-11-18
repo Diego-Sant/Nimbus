@@ -325,6 +325,9 @@
     @apply subtitle-1 mt-2 w-full text-white/70 md:text-center lg:text-left !important;
   }
 
+  .uploader-button-cancel {
+    @apply bg-white text-neutral-900 hover:bg-neutral-100 h-[52px] gap-2 px-10 rounded-[20px] shadow-drop-1 !important;
+  }
   .uploader-button {
     @apply primary-btn h-[52px] gap-2 px-10 shadow-drop-1 !important;
   }
@@ -360,6 +363,9 @@
   }
   .header-user-avatar {
     @apply aspect-square w-10 rounded-full object-cover !important;
+  }
+  .header-choose-user-avatar {
+    @apply aspect-square w-[50px] rounded-full object-cover !important;
   }
   .mobile-nav {
     @apply h5 flex-1 gap-1 text-primaryColor !important;

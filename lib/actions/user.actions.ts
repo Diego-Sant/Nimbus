@@ -7,6 +7,7 @@ import { appwriteConfig } from "../appwrite/config";
 import { parseStringify } from "../utils";
 import { cookies } from "next/headers";
 import { avatarPlaceholderUrl } from "@/constants";
+import { redirect } from "next/navigation";
 
 const getUserByEmail = async (email: string) => {
     const { databases } = await createAdminClient();
@@ -107,3 +108,59 @@ export const getCurrentUser = async () => {
         return null;
     }
 };
+
+export const updateAvatar = async (userId: string, newAvatarUrl: string) => {
+    const { databases } = await createAdminClient();
+
+    try {
+        await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.usersCollectionId,
+            userId,
+            {
+                avatar: newAvatarUrl
+            }
+        );
+    } catch (error) {
+        handleError(error, "Falha ao atualizar o avatar.");
+    }
+};
+
+
+export const signOutUser = async() => {
+    const sessionClient = await createSessionClient();
+
+    if (!sessionClient) {
+        (await cookies()).delete('appwrite-session');
+        redirect("/entrar");
+        return;
+    }
+
+    const { account } = sessionClient;
+
+    try {
+        await account.deleteSession('current');
+        (await cookies()).delete('appwrite-session');
+
+    } catch (error) {
+        handleError(error, "Falha ao sair da conta!")
+    } finally {
+        redirect("/entrar");
+    }
+}
+
+export const signInUser = async({ email }: { email: string } ) => {
+    try {
+        const existingUser = await getUserByEmail(email);
+
+        if(existingUser) {
+            await sendEmailOTP({ email });
+            return parseStringify({ accountId: existingUser.accountId })
+        }
+
+        return parseStringify({ accountId: null, error: "Usuário não encontrado!"})
+
+    } catch (error) {
+        handleError(error, "Falha ao logar o usuário!")
+    }
+}
