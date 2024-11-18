@@ -83,18 +83,27 @@ export const verifySecret = async ({ accountId, password }: { accountId: string;
     }
 };
 
-export const getCurrentUser = async() => {
-    const { databases, account } = await createSessionClient();
+export const getCurrentUser = async () => {
+    const sessionClient = await createSessionClient();
 
-    const result = await account.get();
+    if (!sessionClient) return null;
 
-    const user = await databases.listDocuments(
-        appwriteConfig.databaseId,
-        appwriteConfig.usersCollectionId,
-        [Query.equal("accountId", result.$id)]
-    );
+    const { databases, account } = sessionClient;
 
-    if(user.total <= 0) return null;
+    try {
+        const result = await account.get();
 
-    return parseStringify(user.documents[0]);
-}
+        const user = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.usersCollectionId,
+            [Query.equal("accountId", result.$id)]
+        );
+
+        if (user.total <= 0) return null;
+
+        return parseStringify(user.documents[0]);
+    } catch (error) {
+        console.error("Erro ao buscar usuário atual:", error);
+        return null;
+    }
+};

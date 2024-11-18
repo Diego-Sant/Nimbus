@@ -349,7 +349,7 @@
     @apply flex-center min-w-fit gap-4 !important;
   }
   .sign-out-button {
-    @apply flex-center h-[52px] min-w-[54px] items-center rounded-full bg-primaryColor/10 p-0 text-primaryColor shadow-none transition-all hover:bg-primaryColor/20 !important;
+    @apply flex-center h-[52px] min-w-[54px] items-center rounded-full bg-red/20 px-6 hover:bg-red/40 p-0 text-red shadow-none transition-all !important;
   }
 
   .mobile-header {
@@ -371,7 +371,7 @@
     @apply flex text-light-100 gap-4 w-full justify-start items-center h5 px-6 h-[52px] rounded-full !important;
   }
   .mobile-sign-out-button {
-    @apply h5 flex h-[52px] w-full items-center gap-4 rounded-full bg-primaryColor/10 px-6 text-primaryColor shadow-none transition-all hover:bg-primaryColor/20 !important;
+    @apply h5 flex h-[52px] w-full items-center gap-4 rounded-full bg-red/20 px-6 hover:bg-red/40 text-red shadow-none transition-all !important;
   }
 
   .otp-close-button {
