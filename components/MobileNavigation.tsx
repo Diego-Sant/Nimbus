@@ -23,7 +23,7 @@ interface Props {
   email: string;
 }
 
-const MobileNavigation = ({ ownerId, accountId, username, avatar, email}: Props) => {
+const MobileNavigation = ({ username, avatar, email}: Props) => {
   const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
