@@ -10,14 +10,19 @@ export const navItems = [
         url: "/documentos"
     },
     { 
+        name: "Arquivos",
+        icon: "/icons/archives.svg",
+        url: "/documentos"
+    },
+    { 
         name: "Imagens",
         icon: "/icons/images.svg",
         url: "/imagens"
     },
     { 
-        name: "Multimídia",
+        name: "Mídia",
         icon: "/icons/media.svg",
-        url: "/multimidia"
+        url: "/midia"
     },
     { 
         name: "Outros",

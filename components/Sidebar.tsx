@@ -67,7 +67,7 @@ const Sidebar = ({ username, avatar, email }: Props) => {
 
       <div className='hidden items-center justify-center lg:flex'>
         <Image src="/Illustration-2.svg" alt='Ilustração de armazenamento na nuvem'
-        width={200} height={200}/>
+        width={160} height={160}/>
       </div>
 
       <div className='sidebar-user-info'>

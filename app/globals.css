@@ -335,7 +335,7 @@
     @apply fixed bottom-10 right-10 z-50 flex size-full h-fit max-w-[480px] flex-col gap-3 rounded-[20px] bg-white p-7 shadow-drop-3 !important;
   }
   .uploader-preview-item {
-    @apply flex items-center justify-between  gap-3 rounded-xl p-3 shadow-drop-3 !important;
+    @apply flex items-center justify-between gap-3 rounded-xl p-3 shadow-drop-3 !important;
   }
   .preview-item-name {
     @apply subtitle-2 mb-2 line-clamp-1 max-w-[300px] !important;
