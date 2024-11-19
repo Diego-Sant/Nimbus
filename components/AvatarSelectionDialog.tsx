@@ -30,11 +30,6 @@ const avatarOptions = [
     "https://cdn-icons-png.flaticon.com/128/1326/1326382.png"
 ];
 
-interface AvatarSelectionDialogProps {
-    currentAvatar: string;
-    onAvatarChange: (newAvatar: string) => void;
-};
-
 const AvatarSelectionDialog = ({ currentAvatar, onAvatarChange }: AvatarSelectionDialogProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedAvatar, setSelectedAvatar] = useState(currentAvatar);

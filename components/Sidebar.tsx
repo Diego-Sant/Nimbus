@@ -11,13 +11,7 @@ import { cn } from '@/lib/utils';
 import AvatarSelectionDialog from './AvatarSelectionDialog';
 import { getCurrentUser, updateAvatar } from '@/lib/actions/user.actions';
 
-interface Props {
-  username: string;
-  avatar: string;
-  email: string;
-}
-
-const Sidebar = ({ username, avatar, email }: Props) => {
+const Sidebar = ({ username, avatar, email }: SidebarProps) => {
   const pathname = usePathname();
   const [currentAvatar, setCurrentAvatar] = useState(avatar);
 

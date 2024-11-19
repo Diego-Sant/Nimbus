@@ -1,11 +1,12 @@
-import React from 'react'
-import { redirect } from 'next/navigation'
+import React from 'react';
+import { redirect } from 'next/navigation';
 
-import Header from '@/components/Header'
-import MobileNavigation from '@/components/MobileNavigation'
-import Sidebar from '@/components/Sidebar'
+import { Toaster } from "@/components/ui/toaster";
+import Header from '@/components/Header';
+import MobileNavigation from '@/components/MobileNavigation';
+import Sidebar from '@/components/Sidebar';
 
-import { getCurrentUser } from '@/lib/actions/user.actions'
+import { getCurrentUser } from '@/lib/actions/user.actions';
 
 const Layout = async({ children }: { children: React.ReactNode }) => {
   const currentUser = await getCurrentUser();
@@ -19,12 +20,14 @@ const Layout = async({ children }: { children: React.ReactNode }) => {
         <section className='flex h-full flex-1 flex-col'>
 
             <MobileNavigation {... currentUser} />
-            <Header />
+            <Header userId={currentUser.$id} accountId={currentUser.accountId} />
             <div className='main-content'>
                 {children}
             </div>
 
         </section>
+
+        <Toaster />
     </main>
   )
 }

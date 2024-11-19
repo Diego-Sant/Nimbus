@@ -15,15 +15,7 @@ import { Button } from '@/components/ui/button';
 import FileUploader from '@/components/FileUploader';
 import AvatarSelectionDialog from '@/components/AvatarSelectionDialog';
 
-interface Props {
-  ownerId: string;
-  accountId: string;
-  username: string;
-  avatar: string;
-  email: string;
-}
-
-const MobileNavigation = ({ username, avatar, email}: Props) => {
+const MobileNavigation = ({ $id: ownerId, accountId, username, avatar, email}: MobileNavigationProps ) => {
   const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
@@ -90,7 +82,7 @@ const MobileNavigation = ({ username, avatar, email}: Props) => {
           <Separator className='my-5 bg-light-200/20' />
 
           <div className='flex flex-col justify-between gap-5 pb-5'>
-            <FileUploader />
+            <FileUploader ownerId={ownerId} accountId={accountId} />
 
             <Button type='submit' className='mobile-sign-out-button' 
               onClick={async() => await signOutUser()}>
