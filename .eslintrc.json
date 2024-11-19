@@ -1,3 +1,4 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "plugin:tailwindcss/recommended"]
+  "extends": ["next/core-web-vitals", "next/typescript", "plugin:tailwindcss/recommended"],
+  "parser": "babel-eslint"
 }
