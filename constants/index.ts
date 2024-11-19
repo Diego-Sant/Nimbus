@@ -88,4 +88,4 @@ export const sortTypes = [
 
 export const avatarPlaceholderUrl = "https://img.freepik.com/premium-vector/man-empty-avatar-casual-business-style-vector-photo-placeholder-social-networks-resumes_885953-434.jpg"
 
-export const MAX_FILE_SIZE = 14 * 1024 * 1024 * 1024;
+export const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024;
