@@ -3,11 +3,12 @@
 import { revalidatePath } from "next/cache";
 
 import { InputFile } from "node-appwrite/file";
-import { ID } from "node-appwrite";
+import { ID, Models, Query } from "node-appwrite";
 
 import { createAdminClient } from "../appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import { constructFileUrl, getFileType, parseStringify } from "../utils";
+import { getCurrentUser } from "./user.actions";
 
 const handleError = (error: unknown, message: string) => {
     console.log(error, message);
@@ -60,3 +61,41 @@ export const uploadFile = async({ file, ownerId, accountId, path }
             handleError(error, "Falha ao enviar o arquivo.");
         }
 };
+
+const createQueries = (currentUser: Models.Document) => {
+    const queries = [
+        Query.or([
+            Query.equal("owner", [currentUser.$id]),
+            Query.contains("users", [currentUser.email])
+        ])
+    ];
+
+    return queries;
+}
+
+export const getFiles = async() => {
+    const { databases } = await createAdminClient();
+
+    try {
+        const currentUser = await getCurrentUser();
+
+        if (!currentUser) throw new Error("Usuário não encontrado.");
+
+        const queries = createQueries(currentUser);
+
+        console.log({currentUser, queries})
+
+        const files = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.filesCollectionId,
+            queries
+        );
+
+        console.log(files);
+
+        return parseStringify(files);
+
+    } catch (error) {
+        handleError(error, "Falha ao buscar os arquivos.");
+    }
+}

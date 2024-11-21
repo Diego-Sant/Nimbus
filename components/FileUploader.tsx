@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { uploadFile } from '@/lib/actions/file.actions';
 
 const FileUploader = ({ ownerId, accountId, className }: FileUploaderProps ) => {
-  const [files, setFiles] = useState<File[]>([])
+  const [files, setFiles] = useState<File[]>([]);
   const { toast } = useToast();
   const path = usePathname();
   
@@ -78,7 +78,7 @@ const FileUploader = ({ ownerId, accountId, className }: FileUploaderProps ) => 
                 <div className='flex items-center gap-3'>
                   <Thumbnail type={type} extension={extension} url={convertFileToUrl(file)} />
 
-                  <div className='preview-item-name'>
+                  <div className='preview-item-name flex-col'>
                     {file.name}
                     <Image src="/icons/file-loader.gif" width={80}
                       height={26} alt='Carregando...' />
