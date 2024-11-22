@@ -4,8 +4,9 @@ import Link from 'next/link'
 import { Models } from 'node-appwrite'
 
 import { convertFileSize } from '@/lib/utils'
-import Thumbnail from './Thumbnail'
-import FormattedDateTime from './FormattedDateTime'
+import Thumbnail from '@/components/Thumbnail'
+import FormattedDateTime from '@/components/FormattedDateTime'
+import ActionDropdown from '@/components/ActionDropdown'
 
 const Card = ({ file }: { file: Models.Document }) => {
   return (
@@ -17,7 +18,7 @@ const Card = ({ file }: { file: Models.Document }) => {
         />
 
         <div className='flex flex-col items-end justify-between'>
-          Actions
+          <ActionDropdown file={file} />
 
           <p className='body-1'>
             {convertFileSize(file.size)}
