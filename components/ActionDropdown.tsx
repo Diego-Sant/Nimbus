@@ -28,6 +28,8 @@ import { Input } from '@/components/ui/input';
 import { actionsDropdownItems } from '@/constants';
 import { constructDownloadUrl } from '@/lib/utils';
 import { Button } from './ui/button';
+import { renameFile } from '@/lib/actions/file.actions';
+import { usePathname } from 'next/navigation';
   
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
@@ -36,7 +38,9 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const [action, setAction] = useState<ActionType | null>(null);
-    const [name, setName] = useState(file.name);
+    const [name, setName] = useState(file.name.replace(`.${file.extension}`, ""));
+
+    const path = usePathname();
 
     const closeAllModals = () => {
         setIsModalOpen(false);
@@ -46,7 +50,26 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     };
 
     const handleAction = async() => {
-        
+        if (!action) return;
+        setIsLoading(true);
+
+        let success = false;
+
+        const actions = {
+            rename: () => 
+                renameFile({ fileId: file.$id, name: name.trim(), 
+                    extension: file.extension, path
+                }),
+
+            share: () => console.log("share"),
+            delete: () => console.log("delete"),
+        }
+
+        success = await actions[action.value as keyof typeof actions]();
+
+        if (success) closeAllModals();
+
+        setIsLoading(false);
     }
 
     const renderDialogContent = () => {
@@ -90,7 +113,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                                     height={24} className='animate-spin'
                                 />
                             )}
-                            
+
                         </Button>
 
                     </DialogFooter>

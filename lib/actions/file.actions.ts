@@ -99,3 +99,26 @@ export const getFiles = async() => {
         handleError(error, "Falha ao buscar os arquivos.");
     }
 }
+
+export const renameFile = async({ fileId, name, extension, path }: RenameFileProps) => {
+    const { databases } = await createAdminClient();
+
+    try {
+        const newName = `${name}.${extension}`;
+        const updatedFile = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.filesCollectionId,
+            fileId,
+            {
+                name: newName
+            }
+        );
+
+        revalidatePath(path);
+
+        return parseStringify(updatedFile);
+
+    } catch (error) {
+        handleError(error, "Falha ao renomear o arquivo.");
+    }
+}
