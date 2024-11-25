@@ -83,15 +83,11 @@ export const getFiles = async() => {
 
         const queries = createQueries(currentUser);
 
-        console.log({currentUser, queries})
-
         const files = await databases.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.filesCollectionId,
             queries
         );
-
-        console.log(files);
 
         return parseStringify(files);
 
@@ -120,5 +116,27 @@ export const renameFile = async({ fileId, name, extension, path }: RenameFilePro
 
     } catch (error) {
         handleError(error, "Falha ao renomear o arquivo.");
+    }
+}
+
+export const updateFileUsers = async({ fileId, emails, path }: UpdateFileUsersProps) => {
+    const { databases } = await createAdminClient();
+
+    try {
+        const updatedFile = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.filesCollectionId,
+            fileId,
+            {
+                users: emails
+            }
+        );
+
+        revalidatePath(path);
+
+        return parseStringify(updatedFile);
+
+    } catch (error) {
+        handleError(error, "Falha ao atualizar os usuários do arquivo.");
     }
 }

@@ -28,9 +28,9 @@ import { Input } from '@/components/ui/input';
 import { actionsDropdownItems } from '@/constants';
 import { constructDownloadUrl } from '@/lib/utils';
 import { Button } from './ui/button';
-import { renameFile } from '@/lib/actions/file.actions';
+import { renameFile, updateFileUsers } from '@/lib/actions/file.actions';
 import { usePathname } from 'next/navigation';
-import { FileDetails } from './ActionsModalContent';
+import { FileDetails, ShareInput } from './ActionsModalContent';
   
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
@@ -38,6 +38,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [emails, setEmails] = useState<string[]>([]);
     const [action, setAction] = useState<ActionType | null>(null);
     const [name, setName] = useState(file.name.replace(`.${file.extension}`, ""));
 
@@ -61,9 +62,9 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                 renameFile({ fileId: file.$id, name: name.trim(), 
                     extension: file.extension, path
                 }),
-
-            share: () => console.log("share"),
-            delete: () => console.log("delete"),
+            share: () => updateFileUsers ({
+                fileId: file.$id, emails, path
+            }),
         }
 
         success = await actions[action.value as keyof typeof actions]();
@@ -72,6 +73,20 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
         setIsLoading(false);
     }
+
+    const handleRemoveUser = async (email: string) => {
+        const updatedEmails = emails.filter((e) => e !== email);
+
+        const success = await updateFileUsers({
+            fileId: file.$id,
+            emails: updatedEmails,
+            path
+        });
+
+        if (success) setEmails(updatedEmails);
+
+        closeAllModals();
+    };
 
     const renderDialogContent = () => {
         if (!action) return null;
@@ -94,6 +109,13 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
                     {value === 'details' && (
                         <FileDetails file={file} />
+                    )}
+
+                    {value === "share" && (
+                        <ShareInput file={file} 
+                            onInputChange={setEmails} 
+                            onRemove={handleRemoveUser} 
+                        />
                     )}
                     
                 </DialogHeader>
