@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -25,13 +27,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { FileDetails, ShareInput } from '@/components/ActionsModalContent';
+  
 import { actionsDropdownItems } from '@/constants';
 import { constructDownloadUrl } from '@/lib/utils';
-import { Button } from './ui/button';
-import { renameFile, updateFileUsers } from '@/lib/actions/file.actions';
-import { usePathname } from 'next/navigation';
-import { FileDetails, ShareInput } from './ActionsModalContent';
-  
+import { deleteFile, renameFile, updateFileUsers } from '@/lib/actions/file.actions';
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,11 +66,41 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
             share: () => updateFileUsers ({
                 fileId: file.$id, emails, path
             }),
+            delete: () => deleteFile({ 
+                fileId: file.$id, path, bucketFileId: file.bucketFileId 
+            }),
         }
 
         success = await actions[action.value as keyof typeof actions]();
 
-        if (success) closeAllModals();
+        if (success) {
+            if (action?.value === 'share') {
+                setEmails([]);
+            }
+            if (action?.value === 'delete') {
+                toast.success('Seu arquivo foi excluído com sucesso!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            };
+            if (action?.value === 'rename') {
+                toast.success('Seu arquivo foi renomeado com sucesso!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+            if (action?.value !== 'share') closeAllModals();
+        }
 
         setIsLoading(false);
     }
@@ -112,10 +143,20 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                     )}
 
                     {value === "share" && (
-                        <ShareInput file={file} 
+                        <ShareInput file={file}
+                            emails={emails}
                             onInputChange={setEmails} 
                             onRemove={handleRemoveUser} 
                         />
+                    )}
+
+                    {value === 'delete' && (
+                        <p className='delete-confimation pb-3'>
+                            Tem certeza que deseja excluir esse arquivo?{` `}
+                            <span className='delete-file-name'>
+                                {file.name}
+                            </span>
+                        </p>
                     )}
                     
                 </DialogHeader>

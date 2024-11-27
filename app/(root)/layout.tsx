@@ -1,7 +1,10 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 
+import { ToastContainer } from 'react-toastify';
 import { Toaster } from "@/components/ui/toaster";
+import 'react-toastify/dist/ReactToastify.css';
+
 import Header from '@/components/Header';
 import MobileNavigation from '@/components/MobileNavigation';
 import Sidebar from '@/components/Sidebar';
@@ -27,6 +30,7 @@ const Layout = async({ children }: { children: React.ReactNode }) => {
 
         </section>
 
+        <ToastContainer />
         <Toaster />
     </main>
   )

@@ -18,35 +18,61 @@ const FileUploader = ({ ownerId, accountId, className }: FileUploaderProps ) => 
   const { toast } = useToast();
   const path = usePathname();
   
-  const onDrop = useCallback(async(acceptedFiles: File[]) => {
-    setFiles(acceptedFiles);
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    const validFiles: File[] = [];
+    const errorFiles: File[] = [];
 
-    const uploadPromises = acceptedFiles.map(async(file) => {
-      if(file.size > MAX_FILE_SIZE) {
-        setFiles((prev) => prev.filter((f) => f.name !== file.name));
-
-        return toast({
-          description: (
-            <p className='body-2 text-white'>
-              <span className='font-semibold'>
-                {file.name}
-              </span> é muito grande. Tamanho máximo é {MAX_FILE_SIZE / 1024 / 1024}MB
-            </p>
-          ), className: "error-toast"
-        });
-      }
-
-      return uploadFile({ file, ownerId, accountId, path })
-        .then((uploadedFile) => {
-          if(uploadedFile) {
-            setFiles((prev) => prev.filter((f) => f.name !== file.name));
-          }
-        });
+    acceptedFiles.forEach((file) => {
+        if (file.size > MAX_FILE_SIZE) {
+            errorFiles.push(file);
+            toast({
+                description: (
+                    <p className="body-2 text-white">
+                        <span className="font-semibold">{file.name}</span> é muito grande.
+                        Tamanho máximo é {MAX_FILE_SIZE / 1024 / 1024}MB
+                    </p>
+                ),
+                className: "error-toast",
+            });
+        } else {
+            validFiles.push(file);
+        }
     });
 
-    await Promise.all(uploadPromises);
+    setFiles((prev) => [...prev, ...validFiles]);
 
-  }, [ownerId, accountId, path]);
+    const uploadPromises = validFiles.map(async (file) => {
+        return uploadFile({ file, ownerId, accountId, path })
+            .then(() => file)
+            .catch(() => null);
+    });
+
+    const uploadedFiles = (await Promise.all(uploadPromises)).filter(Boolean) as File[];
+
+    setFiles((prev) => prev.filter((file) => !uploadedFiles.some((uf) => uf.name === file.name)));
+
+    if (uploadedFiles.length === 1) {
+        toast({
+            description: (
+                <p className="body-2 text-white">
+                    <span className="font-semibold">{uploadedFiles[0].name}</span> foi enviado com sucesso!
+                </p>
+            ),
+            className: "success-toast",
+        });
+    } else if (uploadedFiles.length > 1) {
+        const fileNames = uploadedFiles.map((f) => f.name);
+        const formattedNames = fileNames.slice(0, -1).join(", ") + " e " + fileNames.slice(-1);
+        toast({
+            description: (
+                <p className="body-2 text-white">
+                    <span className="font-semibold">{formattedNames}</span> foram enviados com sucesso!
+                </p>
+            ),
+            className: "success-toast",
+        });
+    }
+  }, [ownerId, accountId, path, toast]);
 
   const handleRemoveFile = (e: React.MouseEvent<HTMLImageElement>, fileName: string) => {
     e.stopPropagation();

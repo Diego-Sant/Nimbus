@@ -1,12 +1,13 @@
 import { Models } from 'node-appwrite'
 import React from 'react'
 
-import Thumbnail from './Thumbnail'
-import FormattedDateTime from './FormattedDateTime'
-import { convertFileSize, formatDateTime } from '@/lib/utils';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
 import Image from 'next/image';
+
+import { convertFileSize, formatDateTime } from '@/lib/utils';
+import Thumbnail from '@/components/Thumbnail'
+import FormattedDateTime from '@/components/FormattedDateTime'
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 const ImageThumbnail = ({ file }: { file: Models.Document }) => (
     <div className='file-details-thumbnail'>
@@ -51,7 +52,8 @@ export const FileDetails = ({ file }: { file: Models.Document}) => {
   )
 }
 
-export const ShareInput = ({ file, onInputChange, onRemove }: ShareInputProps) => {
+export const ShareInput = ({ file, emails, onInputChange, onRemove }: ShareInputProps) => {
+
     return (
       <>
         <ImageThumbnail file={file} />
@@ -61,8 +63,9 @@ export const ShareInput = ({ file, onInputChange, onRemove }: ShareInputProps) =
                 Compartilhar arquivo com outros usuários.
             </p>
 
-            <Input type='email' placeholder='Coloque o endereço de email.' 
-                onChange={(e) => onInputChange(e.target.value.trim().split(','))} 
+            <Input type='email' placeholder='Coloque o endereço de email.'
+                value={emails}
+                onChange={(e) => onInputChange(e.target.value.trim().split(','))}
                 className='share-input-field'
             />
 
@@ -98,6 +101,4 @@ export const ShareInput = ({ file, onInputChange, onRemove }: ShareInputProps) =
         </div>
       </>
     )
-  }
-  
-  export default ShareInput
+}
