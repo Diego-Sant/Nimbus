@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
 import Image from 'next/image';
 
 import { Models } from 'node-appwrite';
@@ -33,6 +32,7 @@ import { FileDetails, ShareInput } from '@/components/ActionsModalContent';
 import { actionsDropdownItems } from '@/constants';
 import { constructDownloadUrl } from '@/lib/utils';
 import { deleteFile, renameFile, updateFileUsers } from '@/lib/actions/file.actions';
+import { getCurrentUser } from '@/lib/actions/user.actions';
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,8 +42,18 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const [emails, setEmails] = useState<string[]>([]);
     const [action, setAction] = useState<ActionType | null>(null);
     const [name, setName] = useState(file.name.replace(`.${file.extension}`, ""));
+    const [currentUser, setCurrentUser] = useState<Models.Document | null>(null);
 
     const path = usePathname();
+
+    useEffect(() => {
+        const fetchCurrentUser = async () => {
+            const user = await getCurrentUser();
+            setCurrentUser(user);
+        };
+
+        fetchCurrentUser();
+    }, []);
 
     const closeAllModals = () => {
         setIsModalOpen(false);
@@ -208,39 +218,47 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
+                
 
-                {actionsDropdownItems.map((actionItem) => (
-                    <DropdownMenuItem key={actionItem.value}
-                        className='shad-dropwdown-item' 
+                {(currentUser?.username === file.owner.username ? actionsDropdownItems : actionsDropdownItems.filter(actionItem => ["details", "download", "share"].includes(actionItem.value))).map((actionItem) => (
+                    <DropdownMenuItem key={actionItem.value} className="shad-dropwdown-item"
                         onClick={() => {
-                            setAction(actionItem)
-
-                            if(['rename', 'share', 'delete', 'details'].includes(actionItem.value)) {
+                            setAction(actionItem);
+                            if (["rename", "delete", "share", "details"].includes(actionItem.value)) {
                                 setIsModalOpen(true);
                             }
                         }}
                     >
 
                         {actionItem.value === 'download' ? (
-                            <Link href={constructDownloadUrl(file.bucketFileId)}
-                            download={file.name} className='flex items-center gap-2'
-                            >
-                        
-                            <Image src={actionItem.icon} alt={actionItem.label}
-                                width={30} height={30} 
-                            />
-                            {actionItem.label}
+                            <a href={constructDownloadUrl(file.bucketFileId)} download={file.name}
+                                className="flex items-center gap-2 w-full h-full">
 
-                        </Link>
-                        ) : 
-                        <div className='flex items-center gap-2'>
-                            <Image src={actionItem.icon} alt={actionItem.label}
-                                width={30} height={30} 
-                            />
-                            {actionItem.label}
-                        </div>}
-                        
+                                <div className="flex items-center gap-2 w-full">
+                                    <Image
+                                        src={actionItem.icon}
+                                        alt={actionItem.label}
+                                        width={30}
+                                        height={30}
+                                    />
+                                    {actionItem.label}
+                                </div>
 
+                            </a>
+
+                        ) : (
+
+                            <div className="flex items-center gap-2">
+                                <Image
+                                    src={actionItem.icon}
+                                    alt={actionItem.label}
+                                    width={30}
+                                    height={30}
+                                />
+                                {actionItem.label}
+                            </div>
+
+                        )}
                     </DropdownMenuItem>
                 ))}
 
