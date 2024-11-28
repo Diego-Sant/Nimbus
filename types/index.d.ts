@@ -77,6 +77,12 @@ interface ThumbnailProps {
     imageClassName?: string;
 }
 
+interface RemoveFileUserProps {
+    fileId: string;
+    currentUserEmail: string;
+    path: string;
+}
+
 interface ShareInputProps {
     file: Models.Document;
     emails: string[];

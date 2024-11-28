@@ -1,23 +1,23 @@
 "use client"
 
-import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-import { createAccount, signInUser } from "@/lib/actions/user.actions";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { createAccount, signInUser } from '@/lib/actions/user.actions';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem,
-FormLabel, FormMessage } from "@/components/ui/form";
+FormLabel, FormMessage } from '@/components/ui/form';
 
-import OTPModal from "@/components/OTPModal";
+import OTPModal from '@/components/OTPModal';
 
-type FormType = 'entrar' | 'cadastrar';
+type FormType = "entrar" | "cadastrar";
 
 const authFormSchema = (formType: FormType) => {
     return z.object({
@@ -46,7 +46,7 @@ const AuthForm = ({ type }: {type: FormType}) => {
     
     const onSubmit = async(values: z.infer<typeof formSchema>) => {
         setIsLoading(true);
-        setErrorMessage('');
+        setErrorMessage("");
 
         try {
             const user = type === "cadastrar" ? await createAccount({ 
@@ -149,7 +149,7 @@ const AuthForm = ({ type }: {type: FormType}) => {
         </Form>
 
         {accountId && (
-            <OTPModal email={form.getValues('email')} accountId={accountId} />
+            <OTPModal email={form.getValues("email")} accountId={accountId} />
         )}
     </>
   )

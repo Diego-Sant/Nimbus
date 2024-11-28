@@ -14,7 +14,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from "@/components/ui/dialog"
+} from '@/components/ui/dialog'
 
 import {
     DropdownMenu,
@@ -23,15 +23,15 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu'
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { FileDetails, ShareInput } from '@/components/ActionsModalContent';
+import { FileDetails, RemoveUser, ShareInput } from '@/components/ActionsModalContent';
   
 import { actionsDropdownItems } from '@/constants';
 import { constructDownloadUrl } from '@/lib/utils';
-import { deleteFile, renameFile, updateFileUsers } from '@/lib/actions/file.actions';
+import { deleteFile, removeFileUser, renameFile, updateFileUsers } from '@/lib/actions/file.actions';
 import { getCurrentUser } from '@/lib/actions/user.actions';
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
@@ -69,26 +69,39 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         let success = false;
 
         const actions = {
-            rename: () => 
-                renameFile({ fileId: file.$id, name: name.trim(), 
-                    extension: file.extension, path
+            rename: () => renameFile({
+                fileId: file.$id, name: name.trim(), 
+                extension: file.extension, path
                 }),
             share: () => updateFileUsers ({
                 fileId: file.$id, emails, path
             }),
             delete: () => deleteFile({ 
-                fileId: file.$id, path, bucketFileId: file.bucketFileId 
+                fileId: file.$id, path, 
+                bucketFileId: file.bucketFileId 
             }),
+            remove: () => removeFileUser({
+                fileId: file.$id, 
+                currentUserEmail: currentUser?.email,path
+            })
         }
 
         success = await actions[action.value as keyof typeof actions]();
 
         if (success) {
-            if (action?.value === 'share') {
-                setEmails([]);
+            if (action?.value === "share") {
+                toast.success("Seu arquivo foi compartilhado com sucesso!", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
-            if (action?.value === 'delete') {
-                toast.success('Seu arquivo foi excluído com sucesso!', {
+            if (action?.value === "delete") {
+                toast.success("Seu arquivo foi excluído com sucesso!", {
                     position: "top-right",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -98,8 +111,8 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                     progress: undefined,
                 });
             };
-            if (action?.value === 'rename') {
-                toast.success('Seu arquivo foi renomeado com sucesso!', {
+            if (action?.value === "rename") {
+                toast.success("Seu arquivo foi renomeado com sucesso!", {
                     position: "top-right",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -108,8 +121,20 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                     draggable: true,
                     progress: undefined,
                 });
-            }
-            if (action?.value !== 'share') closeAllModals();
+            };
+            if (action?.value === "remove") {
+                toast.success("Seu email foi removido do compartilhamento com sucesso!", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            };
+
+            closeAllModals();
         }
 
         setIsLoading(false);
@@ -135,20 +160,20 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         const { value, label } = action;
 
         return (
-            <DialogContent className='shad-dialog button'>
-                <DialogHeader className='flex flex-col gap-3'>
+            <DialogContent className="shad-dialog button">
+                <DialogHeader className="flex flex-col gap-3">
 
-                    <DialogTitle className='text-center text-light-100'>
+                    <DialogTitle className="text-center text-light-100">
                         {label}
                     </DialogTitle>
 
-                    {value === 'rename' && (
-                        <Input type='text' value={name}
+                    {value === "rename" && (
+                        <Input type="text" value={name}
                             onChange={(e) => setName(e.target.value)} 
                         />
                     )}
 
-                    {value === 'details' && (
+                    {value === "details" && (
                         <FileDetails file={file} />
                     )}
 
@@ -160,10 +185,14 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                         />
                     )}
 
-                    {value === 'delete' && (
-                        <p className='delete-confimation pb-3'>
+                    {value === "remove" && (
+                        <RemoveUser file={file} />
+                    )}
+
+                    {value === "delete" && (
+                        <p className="delete-confimation pb-3">
                             Tem certeza que deseja excluir esse arquivo?{` `}
-                            <span className='delete-file-name'>
+                            <span className="delete-file-name">
                                 {file.name}
                             </span>
                         </p>
@@ -171,24 +200,24 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                     
                 </DialogHeader>
 
-                {['rename', 'delete', 'share'].includes(value) && (
-                    <DialogFooter className='flex flex-col gap-3 md:flex-row'>
+                {["rename", "delete", "share", "remove"].includes(value) && (
+                    <DialogFooter className="flex flex-col gap-3 md:flex-row">
 
                         <Button onClick={closeAllModals} 
-                            className='modal-cancel-button'>
+                            className="modal-cancel-button">
                             Voltar
                         </Button>
 
                         <Button onClick={handleAction} 
-                            className='modal-submit-button'>
+                            className="modal-submit-button">
 
-                            <p className='capitalize'>
+                            <p className="capitalize">
                                 {label}
                             </p>
                             {isLoading && (
                                 <Image src="/icons/loader.svg"
-                                    alt='Carregando...' width={24}
-                                    height={24} className='animate-spin'
+                                    alt="Carregando..." width={24}
+                                    height={24} className="animate-spin"
                                 />
                             )}
 
@@ -205,32 +234,37 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
 
 
-            <DropdownMenuTrigger className='shad-no-focus'>
-                <Image src="/icons/dots.svg" alt='Abrir menu' 
+            <DropdownMenuTrigger className="shad-no-focus">
+                <Image src="/icons/dots.svg" alt="Abrir menu" 
                     width={34} height={34} 
                 />
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent className='min-w-[250px] mr-2 sm:mr-0'>
+            <DropdownMenuContent className="min-w-[250px] mr-2 sm:mr-0">
 
-                <DropdownMenuLabel className='max-w-[200px] truncate'>
+                <DropdownMenuLabel className="max-w-[200px] truncate">
                     {file.name}
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
                 
+                {actionsDropdownItems.filter(actionItem => {
+                    if (currentUser?.username === file.owner.username) {
+                        return actionItem.value !== "remove";
+                    }
+                    return ["details", "download", "remove"].includes(actionItem.value);
+                }).map((actionItem) => (
 
-                {(currentUser?.username === file.owner.username ? actionsDropdownItems : actionsDropdownItems.filter(actionItem => ["details", "download", "share"].includes(actionItem.value))).map((actionItem) => (
                     <DropdownMenuItem key={actionItem.value} className="shad-dropwdown-item"
                         onClick={() => {
                             setAction(actionItem);
-                            if (["rename", "delete", "share", "details"].includes(actionItem.value)) {
+                            if (["rename", "delete", "share", "details", "remove"].includes(actionItem.value)) {
                                 setIsModalOpen(true);
                             }
                         }}
                     >
 
-                        {actionItem.value === 'download' ? (
+                        {actionItem.value === "download" ? (
                             <a href={constructDownloadUrl(file.bucketFileId)} download={file.name}
                                 className="flex items-center gap-2 w-full h-full">
 

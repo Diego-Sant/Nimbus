@@ -82,17 +82,17 @@ const FileUploader = ({ ownerId, accountId, className }: FileUploaderProps ) => 
   const {getRootProps, getInputProps} = useDropzone({onDrop})
 
   return (
-    <div {...getRootProps()} className='cursor-pointer'>
+    <div {...getRootProps()} className="cursor-pointer">
       <input {...getInputProps()} />
 
-      <Button type='button' className={cn('uploader-button', className)}>
-        <Image src="/icons/upload.svg" alt='Upar arquivos' width={24} height={24} />
+      <Button type="button" className={cn("uploader-button", className)}>
+        <Image src="/icons/upload.svg" alt="Upar arquivos" width={24} height={24} />
         <p>Carregar Arquivo</p>
       </Button>
 
       {files.length > 0 && (
-        <ul className='uploader-preview-list'>
-          <h4 className='h4 text-light-100'>
+        <ul className="uploader-preview-list">
+          <h4 className="h4 text-light-100">
             Carregando arquivos...
           </h4>
 
@@ -100,14 +100,14 @@ const FileUploader = ({ ownerId, accountId, className }: FileUploaderProps ) => 
             const { type, extension } = getFileType(file.name);
 
             return (
-              <li key={`${file.name}-${index}`} className='uploader-preview-item'>
-                <div className='flex items-center gap-3'>
+              <li key={`${file.name}-${index}`} className="uploader-preview-item">
+                <div className="flex items-center gap-3">
                   <Thumbnail type={type} extension={extension} url={convertFileToUrl(file)} />
 
-                  <div className='preview-item-name flex-col'>
+                  <div className="preview-item-name flex-col">
                     {file.name}
                     <Image src="/icons/file-loader.gif" width={80}
-                      height={26} alt='Carregando...' />
+                      height={26} alt="Carregando..." />
                   </div>
                 </div>
 

@@ -1,14 +1,14 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from 'next/cache';
 
-import { InputFile } from "node-appwrite/file";
-import { ID, Models, Query } from "node-appwrite";
+import { InputFile } from 'node-appwrite/file';
+import { ID, Models, Query } from 'node-appwrite';
 
-import { createAdminClient } from "@/lib/appwrite";
-import { appwriteConfig } from "@/lib/appwrite/config";
-import { constructFileUrl, getFileType, parseStringify } from "@/lib/utils";
-import { getCurrentUser } from "@/lib/actions/user.actions";
+import { createAdminClient } from '@/lib/appwrite';
+import { appwriteConfig } from '@/lib/appwrite/config';
+import { constructFileUrl, getFileType, parseStringify } from '@/lib/utils';
+import { getCurrentUser } from '@/lib/actions/user.actions';
 
 const handleError = (error: unknown, message: string) => {
     console.log(error, message);
@@ -118,6 +118,40 @@ export const renameFile = async({ fileId, name, extension, path }: RenameFilePro
 
     } catch (error) {
         handleError(error, "Falha ao renomear o arquivo.");
+    }
+}
+
+export const removeFileUser = async({ fileId, currentUserEmail, path }: RemoveFileUserProps) => {
+    const { databases } = await createAdminClient();
+
+    try {
+        const file = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.filesCollectionId,
+            fileId
+        );
+
+        if (!file.users || !Array.isArray(file.users)) {
+            throw new Error("O arquivo não possui usuários compartilhados.");
+        }
+
+        const updatedUsers = file.users.filter(email => email !== currentUserEmail);
+
+        const updatedFile = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.filesCollectionId,
+            fileId,
+            {
+                users: updatedUsers
+            }
+        );
+
+        revalidatePath(path);
+
+        return parseStringify(updatedFile);
+
+    } catch (error) {
+        handleError(error, "Falha ao remover o usuário do arquivo.");
     }
 }
 

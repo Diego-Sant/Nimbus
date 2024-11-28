@@ -1,13 +1,13 @@
 "use server";
 
-import { ID, Query } from "node-appwrite";
+import { ID, Query } from 'node-appwrite';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-import { createAdminClient, createSessionClient } from "../appwrite";
-import { appwriteConfig } from "../appwrite/config";
-import { parseStringify } from "../utils";
-import { cookies } from "next/headers";
-import { avatarPlaceholderUrl } from "@/constants";
-import { redirect } from "next/navigation";
+import { createAdminClient, createSessionClient } from '@/lib/appwrite';
+import { appwriteConfig } from '@/lib/appwrite/config';
+import { parseStringify } from '@/lib/utils';
+import { avatarPlaceholderUrl } from '@/constants';
 
 const getUserByEmail = async (email: string) => {
     const { databases } = await createAdminClient();
@@ -70,10 +70,10 @@ export const verifySecret = async ({ accountId, password }: { accountId: string;
         const { account } = await createAdminClient();
         const session = await account.createSession(accountId, password);
 
-        (await cookies()).set('appwrite-session', session.secret, {
-            path: '/',
+        (await cookies()).set("appwrite-session", session.secret, {
+            path: "/",
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: "strict",
             secure: true
         });
 
@@ -131,7 +131,7 @@ export const signOutUser = async() => {
     const sessionClient = await createSessionClient();
 
     if (!sessionClient) {
-        (await cookies()).delete('appwrite-session');
+        (await cookies()).delete("appwrite-session");
         redirect("/entrar");
         return;
     }
@@ -139,8 +139,8 @@ export const signOutUser = async() => {
     const { account } = sessionClient;
 
     try {
-        await account.deleteSession('current');
-        (await cookies()).delete('appwrite-session');
+        await account.deleteSession("current");
+        (await cookies()).delete("appwrite-session");
 
     } catch (error) {
         handleError(error, "Falha ao sair da conta!")
