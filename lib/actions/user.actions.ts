@@ -128,17 +128,17 @@ export const updateAvatar = async (userId: string, newAvatarUrl: string) => {
 
 
 export const signOutUser = async() => {
-    const sessionClient = await createSessionClient();
-
-    if (!sessionClient) {
-        (await cookies()).delete("appwrite-session");
-        redirect("/entrar");
-        return;
-    }
-
-    const { account } = sessionClient;
-
     try {
+        const sessionClient = await createSessionClient();
+        
+        if (!sessionClient) {
+            (await cookies()).delete("appwrite-session");
+            redirect("/entrar");
+            return;
+        }
+
+        const { account } = sessionClient;
+
         await account.deleteSession("current");
         (await cookies()).delete("appwrite-session");
 

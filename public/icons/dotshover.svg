@@ -1,0 +1,22 @@
+<svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<path d="M14.166 26.9167C14.166 28.475 15.441 29.75 16.9993 29.75C18.5577 29.75 19.8327 28.475 19.8327 26.9167C19.8327 25.3583 18.5577 24.0833 16.9993 24.0833C15.441 24.0833 14.166 25.3583 14.166 26.9167Z" stroke="#A3B2C7" stroke-width="1.50667"/>
+<path d="M14.166 17.0007C14.166 18.559 15.441 19.834 16.9993 19.834C18.5577 19.834 19.8327 18.559 19.8327 17.0007C19.8327 15.4423 18.5577 14.1673 16.9993 14.1673C15.441 14.1673 14.166 15.4423 14.166 17.0007Z" stroke="#A3B2C7" stroke-width="1.50667"/>
+<path d="M14.166 7.08272C14.166 8.64106 15.441 9.91606 16.9993 9.91606C18.5577 9.91606 19.8327 8.64106 19.8327 7.08272C19.8327 5.52439 18.5577 4.24939 16.9993 4.24939C15.441 4.24939 14.166 5.52439 14.166 7.08272Z" stroke="#111111" stroke-width="1.50667"/>
+<rect x="14" y="4" width="6" height="6" fill="url(#pattern0_530_656)"/>
+<path d="M14.166 17.0827C14.166 18.6411 15.441 19.9161 16.9993 19.9161C18.5577 19.9161 19.8327 18.6411 19.8327 17.0827C19.8327 15.5244 18.5577 14.2494 16.9993 14.2494C15.441 14.2494 14.166 15.5244 14.166 17.0827Z" stroke="#111111" stroke-width="1.50667"/>
+<rect x="14" y="14" width="6" height="6" fill="url(#pattern1_530_656)"/>
+<path d="M14.166 27.0827C14.166 28.6411 15.441 29.9161 16.9993 29.9161C18.5577 29.9161 19.8327 28.6411 19.8327 27.0827C19.8327 25.5244 18.5577 24.2494 16.9993 24.2494C15.441 24.2494 14.166 25.5244 14.166 27.0827Z" stroke="#111111" stroke-width="1.50667"/>
+<rect x="14" y="24" width="6" height="6" fill="url(#pattern2_530_656)"/>
+<defs>
+<pattern id="pattern0_530_656" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_530_656" transform="scale(0.125)"/>
+</pattern>
+<pattern id="pattern1_530_656" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_530_656" transform="scale(0.125)"/>
+</pattern>
+<pattern id="pattern2_530_656" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_530_656" transform="scale(0.125)"/>
+</pattern>
+<image id="image0_530_656" width="8" height="8" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAB9SURBVHjahMkxEQIxEEbh9y9NymwU4ICWDnCAhJOAgzOAAipwgANwwklImeqW5ooU3PDNvOqJRc75COwAB+611oluju4efaWUEUA5562kDz9ExMmACyvM7Gz8YcBzbc7z/Nq01qaUkkva91PSDbgKwN2JiAE4LP8h6Q3wHQAjVR9gOxvBRQAAAABJRU5ErkJggg=="/>
+</defs>
+</svg>

@@ -6,7 +6,8 @@ import { cookies } from 'next/headers';
 import { appwriteConfig } from '@/lib/appwrite/config'
 
 export const createSessionClient = async() => {
-    const client = new Client().setEndpoint(appwriteConfig.endpointUrl)
+    const client = new Client()
+        .setEndpoint(appwriteConfig.endpointUrl)
         .setProject(appwriteConfig.projectId);
 
     const session = (await cookies()).get("appwrite-session");

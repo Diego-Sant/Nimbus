@@ -38,6 +38,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const [emails, setEmails] = useState<string[]>([]);
     const [action, setAction] = useState<ActionType | null>(null);
@@ -286,9 +287,13 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
 
 
-            <DropdownMenuTrigger className="shad-no-focus">
-                <Image src="/icons/dots.svg" alt="Abrir menu" 
-                    width={34} height={34} 
+            <DropdownMenuTrigger className="shad-no-focus"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                <Image src={isHovered ? "/icons/dotshover.svg" 
+                    : "/icons/dots.svg"} 
+                    alt="Abrir menu" width={34} height={34} 
                 />
             </DropdownMenuTrigger>
 

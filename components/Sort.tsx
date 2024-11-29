@@ -27,12 +27,12 @@ const Sort = () => {
       <SelectTrigger className="sort-select">
         <SelectValue placeholder={sortTypes[0].label} />
       </SelectTrigger>
-      <SelectContent className='sort-select-content'>
+      <SelectContent className="sort-select-content">
         
         {sortTypes.map((sortType) => (
           <SelectItem key={sortType.label} 
           value={sortType.value}
-          className='shad-select-item'>
+          className="shad-select-item">
             {sortType.label}
           </SelectItem>
         ))}
