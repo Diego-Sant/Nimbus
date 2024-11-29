@@ -68,6 +68,58 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
         let success = false;
 
+        if (action.value === "share") {
+            const emailInput = emails.join(', ')
+
+            if (emailInput.trim() !== "") {
+                toast.error(
+                    "O campo precisa ser enviado ou esvaziado antes de clicar no botão de compartilhar.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "light",
+                    }
+                );
+                setIsLoading(false);
+                return;
+            }
+
+            if (emails.length === 0) {
+                toast.error("Por favor, adicione ao menos um email antes de compartilhar.", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "light",
+                });
+                setIsLoading(false);
+                return;
+            }
+    
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const invalidEmail = emails.find((email) => !emailRegex.test(email));
+    
+            if (invalidEmail) {
+                toast.error(`O email "${invalidEmail}" não é válido. Por favor, corrija antes de compartilhar.`, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "light",
+                });
+                setIsLoading(false);
+                return;
+            }
+        }
+
         const actions = {
             rename: () => renameFile({
                 fileId: file.$id, name: name.trim(), 

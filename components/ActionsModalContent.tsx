@@ -1,3 +1,5 @@
+"use client";
+
 import { Models } from 'node-appwrite'
 import React, { useState } from 'react'
 
