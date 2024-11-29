@@ -113,13 +113,13 @@ const Search = () => {
               result.map((file) => (
                 <li key={file.$id}
                   onClick={() => handleClickItem(file)}
-                  className='flex items-center justify-between gap-4'>
+                  className="flex items-center justify-between gap-4">
                   
-                  <div className='flex cursor-pointer items-center gap-4'>
+                  <div className="flex cursor-pointer items-center gap-4">
                     
                     <Thumbnail type={file.type} 
                       extension={file.extension} url={file.url}
-                      className='size-9 min-w-9'  
+                      className="size-9 min-w-9"  
                     />
 
                     <p className="subtitle-2 line-clamp-1 break-all 
@@ -137,7 +137,7 @@ const Search = () => {
                 </li>
               )
             )) : (
-              <p className='empty-result'>
+              <p className="empty-result">
                 Não encontramos nenhum resultado para "{query}".
               </p>
             )}
