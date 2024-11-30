@@ -214,7 +214,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
         return (
             <DialogContent className="shad-dialog button">
-                <DialogHeader className="flex flex-col gap-3">
+                <DialogHeader className="flex flex-col gap-3 cursor-pointer">
 
                     <DialogTitle className="text-center text-light-100">
                         {label}
@@ -312,7 +312,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                     return ["details", "download", "remove"].includes(actionItem.value);
                 }).map((actionItem) => (
 
-                    <DropdownMenuItem key={actionItem.value} className="shad-dropwdown-item"
+                    <DropdownMenuItem key={actionItem.value} className="shad-dropwdown-item cursor-pointer"
                         onClick={() => {
                             setAction(actionItem);
                             if (["rename", "delete", "share", "details", "remove"].includes(actionItem.value)) {
