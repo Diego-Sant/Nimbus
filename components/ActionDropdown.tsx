@@ -72,7 +72,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         if (action.value === "share") {
             const emailInput = emails.join(', ')
 
-            if (emailInput.trim() !== "") {
+            if (emailInput.trim() === "") {
                 toast.error(
                     "O campo precisa ser enviado ou esvaziado antes de clicar no botão de compartilhar.",
                     {
